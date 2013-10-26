@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="GB2312" ?> 
+
+<SYSTEM>
+		<SIS>
+			<SYS>192.168.175.5</SYS>
+			<SYSSID>dbfourteen</SYSSID>
+			<DBSYNC>conf/config_pandb.xml</DBSYNC>
+	  	<SYNCTIME>500</SYNCTIME>
+	  	<EMPTYCHAR>*</EMPTYCHAR>
+	  	<LOGMOD>
+	  			<LOGDESTINATION>logs/</LOGDESTINATION>
+	  			<LOGLEVEL>2</LOGLEVEL>
+	  			<LOGFILEPREFIX>pandbSYNC_</LOGFILEPREFIX>
+	  			<LOGFILESIZE>10000000</LOGFILESIZE>
+	  	</LOGMOD>
+		</SIS>
+</SYSTEM>
+
+<!--	 		
+					 <STABLE>metcadmin.td_user_login_log</STABLE> 
+					 <DTABLE>sisdest.td_sisdest_log</DTABLE>
+					
+					 <STABLE>kami.v_test</STABLE> 
+					 <DTABLE>sisdest.sectb</DTABLE>
+					 
+					 //ip = "210.42.24.97";
+					 //sid = "metcdb";
+					 
+					 //ip = "210.42.24.118";
+		 			 //sid = "dbseven";
+		 			 
+		 			 //ip = "210.42.24.109";
+		 			 //sid = "dbeight";
+-->  	

@@ -1,0 +1,114 @@
+Fri Oct 25 22:38:47 EDT 2013> ::::::Database Sync Engine V-1.0 get ready
+Fri Oct 25 22:38:48 EDT 2013> [Engine] >>>> Phase 1:System initialize.
+Fri Oct 25 22:38:48 EDT 2013> [SYS] System initialize done.
+Fri Oct 25 22:38:48 EDT 2013> [Engine] >>>> Phase 2:Datasource dump.
+Fri Oct 25 22:38:48 EDT 2013> [Engine] Using config file:conf/config_pandb.xml
+Fri Oct 25 22:38:48 EDT 2013> [DB] Database dump started.Fri Oct 25 22:38:48 EDT 2013> 
+[DB] Table already exisisted
+Fri Oct 25 22:38:48 EDT 2013> [DB] Database dump finished.
+Fri Oct 25 22:38:48 EDT 2013> [Engine] >>>> Phase 3:Compare.
+Fri Oct 25 22:38:48 EDT 2013> [Engine]conf/config_pandb.xml will loop 11 times.
+Fri Oct 25 22:38:48 EDT 2013> [Engine] Begin to calculate check point.
+Fri Oct 25 22:38:48 EDT 2013> [Engine] Check point calculate done.
+Fri Oct 25 22:38:48 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAA0+AA0' and rowidtochar(a.rd) <'AAASz5AAIAAAA5YAAt'
+Fri Oct 25 22:38:50 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAA0+AA0' and a.rd < 'AAASz5AAIAAAA5YAAt'
+Fri Oct 25 22:38:51 EDT 2013> [ENGINE] Starting 1 of 11
+Fri Oct 25 22:38:51 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:38:54 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:38:54 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:38:54 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:38:54 EDT 2013> [Engine] End of 1/11.
+Fri Oct 25 22:38:54 EDT 2013> [Summary] Matched :20000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:38:54 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAA5YAAt' and rowidtochar(a.rd) <'AAASz5AAIAAAAHEAAV'
+Fri Oct 25 22:38:54 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAA5YAAt' and a.rd < 'AAASz5AAIAAAAHEAAV'
+Fri Oct 25 22:38:55 EDT 2013> [ENGINE] Starting 2 of 11
+Fri Oct 25 22:38:55 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:38:56 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:38:56 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:38:57 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:38:57 EDT 2013> [Engine] End of 2/11.
+Fri Oct 25 22:38:57 EDT 2013> [Summary] Matched :40000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:38:57 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAHEAAV' and rowidtochar(a.rd) <'AAASz5AAIAAAAMpAAO'
+Fri Oct 25 22:38:57 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAAHEAAV' and a.rd < 'AAASz5AAIAAAAMpAAO'
+Fri Oct 25 22:38:58 EDT 2013> [ENGINE] Starting 3 of 11
+Fri Oct 25 22:38:58 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:38:59 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:38:59 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:38:59 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:38:59 EDT 2013> [Engine] End of 3/11.
+Fri Oct 25 22:38:59 EDT 2013> [Summary] Matched :60000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:38:59 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAMpAAO' and rowidtochar(a.rd) <'AAASz5AAIAAAASOAAM'
+Fri Oct 25 22:39:00 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAAMpAAO' and a.rd < 'AAASz5AAIAAAASOAAM'
+Fri Oct 25 22:39:01 EDT 2013> [ENGINE] Starting 4 of 11
+Fri Oct 25 22:39:01 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:02 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:02 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:02 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:02 EDT 2013> [Engine] End of 4/11.
+Fri Oct 25 22:39:02 EDT 2013> [Summary] Matched :80000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:02 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAASOAAM' and rowidtochar(a.rd) <'AAASz5AAIAAAAXxAAF'
+Fri Oct 25 22:39:03 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAASOAAM' and a.rd < 'AAASz5AAIAAAAXxAAF'
+Fri Oct 25 22:39:03 EDT 2013> [ENGINE] Starting 5 of 11
+Fri Oct 25 22:39:03 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:04 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:04 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:04 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:04 EDT 2013> [Engine] End of 5/11.
+Fri Oct 25 22:39:04 EDT 2013> [Summary] Matched :100000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:04 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAXxAAF' and rowidtochar(a.rd) <'AAASz5AAIAAAAdWAAB'
+Fri Oct 25 22:39:05 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAAXxAAF' and a.rd < 'AAASz5AAIAAAAdWAAB'
+Fri Oct 25 22:39:06 EDT 2013> [ENGINE] Starting 6 of 11
+Fri Oct 25 22:39:06 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:07 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:07 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:07 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:07 EDT 2013> [Engine] End of 6/11.
+Fri Oct 25 22:39:07 EDT 2013> [Summary] Matched :120000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:07 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAdWAAB' and rowidtochar(a.rd) <'AAASz5AAIAAAAj5AAB'
+Fri Oct 25 22:39:08 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAAdWAAB' and a.rd < 'AAASz5AAIAAAAj5AAB'
+Fri Oct 25 22:39:08 EDT 2013> [ENGINE] Starting 7 of 11
+Fri Oct 25 22:39:08 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:09 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:09 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:09 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:09 EDT 2013> [Engine] End of 7/11.
+Fri Oct 25 22:39:09 EDT 2013> [Summary] Matched :140000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:09 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAj5AAB' and rowidtochar(a.rd) <'AAASz5AAIAAAAofAAz'
+Fri Oct 25 22:39:10 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAAj5AAB' and a.rd < 'AAASz5AAIAAAAofAAz'
+Fri Oct 25 22:39:11 EDT 2013> [ENGINE] Starting 8 of 11
+Fri Oct 25 22:39:11 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:12 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:12 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:12 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:12 EDT 2013> [Engine] End of 8/11.
+Fri Oct 25 22:39:12 EDT 2013> [Summary] Matched :160000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:12 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAofAAz' and rowidtochar(a.rd) <'AAASz5AAIAAAAuEAAt'
+Fri Oct 25 22:39:12 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAAofAAz' and a.rd < 'AAASz5AAIAAAAuEAAt'
+Fri Oct 25 22:39:13 EDT 2013> [ENGINE] Starting 9 of 11
+Fri Oct 25 22:39:13 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:14 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:14 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:14 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:14 EDT 2013> [Engine] End of 9/11.
+Fri Oct 25 22:39:14 EDT 2013> [Summary] Matched :180000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:14 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAuEAAt' and rowidtochar(a.rd) <'AAASz5AAIAAAAznAAm'
+Fri Oct 25 22:39:15 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >='AAASz5AAIAAAAuEAAt' and a.rd < 'AAASz5AAIAAAAznAAm'
+Fri Oct 25 22:39:15 EDT 2013> [ENGINE] Starting 10 of 11
+Fri Oct 25 22:39:15 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:16 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:16 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:16 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:16 EDT 2013> [Engine] End of 10/11.
+Fri Oct 25 22:39:16 EDT 2013> [Summary] Matched :200000 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:16 EDT 2013> [DB] Read s-database started , with sql: SELECT rd,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm, ROWID rd ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select ROWID ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.PANDB order by rowidtochar(ROWID) )) a WHERE  rowidtochar(a.rd) >= 'AAASz5AAIAAAAznAAm'
+Fri Oct 25 22:39:17 EDT 2013> [DB] Read from d-database started , with sql: SELECT sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,trim(SN),trim(TIME),trim(NAME),trim(BLDG),trim(MEASURENAME),trim(VALUE)  from (select rownum rm,sis_ori_rowid rd,sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from (select sis_ori_rowid,sis_des_optime,sis_des_rowidsn ,SN,TIME,NAME,BLDG,MEASURENAME,VALUE from PANDB.DUMP_PANDB2 ORDER BY sis_ori_rowid)) a WHERE  a.rd >= 'AAASz5AAIAAAAznAAm'
+Fri Oct 25 22:39:17 EDT 2013> [ENGINE] Starting 11 of 11
+Fri Oct 25 22:39:17 EDT 2013> [CD S to D]>Begin a Source to Destination compare
+Fri Oct 25 22:39:17 EDT 2013> [CD S to D]>A Source to Destination compare finished.
+Fri Oct 25 22:39:17 EDT 2013> [CD D to S]>Begin a Destination to Source compare
+Fri Oct 25 22:39:17 EDT 2013> [CD D to S]>A Destination to Source compare finished.
+Fri Oct 25 22:39:17 EDT 2013> [Engine] End of 11/11.
+Fri Oct 25 22:39:17 EDT 2013> [Summary] Matched :200698 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:17 EDT 2013> [Engine] ====Compare done.
+Fri Oct 25 22:39:17 EDT 2013> [Summary] Matched :200698 | Insert :0 | Delete:0 | Update:0 |SQL Produce/Execute/Logged:0/0/0
+Fri Oct 25 22:39:17 EDT 2013> [Engine] All done! see ya~

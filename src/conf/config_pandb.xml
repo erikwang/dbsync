@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GB2312" ?> 
+
+<SYSTEM>
+		<SIS>
+			<DBSOURCE>
+				<SOURCE>
+						<SIP>192.168.175.5</SIP>
+						<SSID>dbfourteen</SSID>
+						<STABLE>PANDB.PANDB</STABLE>
+						<OFFSET>20000</OFFSET>
+						<SUSER>pandb</SUSER>
+						<SPSWD>pandb</SPSWD>
+				</SOURCE>
+				
+				<DESTINATION>
+						<DIP>192.168.175.5</DIP>
+						<DSID>dbfourteen</DSID>
+						<DTABLE>PANDB.DUMP_PANDB2</DTABLE>
+						<DUSER>pandb</DUSER>
+						<DPSWD>pandb</DPSWD>
+				</DESTINATION>
+		  </DBSOURCE>
+	   	<EMPTYCHAR>*</EMPTYCHAR>
+		</SIS>
+	<ROWID>ROWID</ROWID>
+        <FD>
+            <ID>1</ID>
+            <LHS>buildingid</LHS>
+            <RHS>buildingname</RHS>
+        </FD>
+
+</SYSTEM>
