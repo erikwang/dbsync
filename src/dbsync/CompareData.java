@@ -19,7 +19,7 @@ public class CompareData{
 				int loggedSql = 0;
 				boolean tbCreateFlag = false;
 				LogMod log;
-				String _emptyChar; //Èç¹ûdvl or StrArrÖÐÎª¿ÕµÄÎ»ÖÃ£¬ÓÉÊ²Ã´×Ö·û´úÌæ¿Õ
+				String _emptyChar; //ï¿½ï¿½ï¿½dvl or StrArrï¿½ï¿½Îªï¿½Õµï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½Ê²Ã´ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½
 			
 				
 			
@@ -31,7 +31,7 @@ public class CompareData{
 			String duser = xmlReader.getFromConf("DUSER",_confFile);
 			String spswd = xmlReader.getFromConf("SPSWD",_confFile);
 			String dpswd = xmlReader.getFromConf("DPSWD",_confFile);
-			System.out.println("^^^"+suser+" "+duser);
+			//System.out.println("^^^"+suser+" "+duser);
 			try{
 				sdb = new DbConn("sou",_confFile,suser,spswd);
 				ddb = new DbConn("des",_confFile,duser,dpswd);
@@ -40,8 +40,10 @@ public class CompareData{
 			}
 			try{
 
-				sysdb = new DbConn("sys","./dbsync/conf/config.xml","","");
-				sysdb1 = new DbConn("sys","./dbsync/conf/config.xml","","");
+				//sysdb = new DbConn("sys","./dbsync/conf/config.xml","","");
+				//sysdb1 = new DbConn("sys","./dbsync/conf/config.xml","","");
+                                sysdb = new DbConn("sys","conf/config.xml","","");
+				sysdb1 = new DbConn("sys","conf/config.xml","","");
 			}catch (Exception e){
 				System.out.println ("Exception from cd init[SYS,SYS, _logfile, _confFile]:"+e);
 				log.saveLog(1,"[!!!EXCEPTION!!!]Compare Data Init:"+e+"\n");
@@ -54,8 +56,10 @@ public class CompareData{
 		public CompareData(String _logFileName){
 			log = new LogMod(_logFileName);
 			try{
-				sysdb = new DbConn("sys","./dbsync/conf/config.xml","","");
-				sysdb1 = new DbConn("sys","./dbsync/conf/config.xml","","");
+				//sysdb = new DbConn("sys","./dbsync/conf/config.xml","","");
+				//sysdb1 = new DbConn("sys","./dbsync/conf/config.xml","","");
+                                  sysdb = new DbConn("sys","conf/config.xml","","");
+				  sysdb1 = new DbConn("sys","conf/config.xml","","");
 			}catch (Exception e){
 				System.out.println ("Exception from cd init:"+e);
 				log.saveLog(1,"[!!!EXCEPTION!!!]Compare Data Init:"+e+"\n");
@@ -67,7 +71,7 @@ public class CompareData{
 
 
 //------------------------------------------------------------------------------------		
-		public boolean initSystem(){  //Çå¿Õsis.sqlcommand
+		public boolean initSystem(){  //ï¿½ï¿½ï¿½sis.sqlcommand
 				boolean flag = false;
 				try{
 						String sql1 = "delete from sqlcommand"; 
@@ -90,7 +94,7 @@ public class CompareData{
 				log.saveLog(3,"[CD] DataVector Size | [Sou DVL Size]:"+sdvlLength+" [Des DVL Size]:"+ddvlLength+"\n");
 				//System.out.println(sdvlLength+"!!"+ddvlLength);
 				
-				System.out.println("[CD S to D] >Begin a Source to Destination compare"); //Ô´µ½Ä¿±êµÄ±È½Ï£¬¿ÉÅÐ¶¨Õû¿é×·¼ÓµÄÇé¿ö£¬Í¬Ê±Æ½ÐÐ±È½ÏÓÉ´Ë·¢¶¯
+				System.out.println("[CD S to D] >Begin a Source to Destination compare"); //Ô´ï¿½ï¿½Ä¿ï¿½ï¿½Ä±È½Ï£ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½×·ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ê±Æ½ï¿½Ð±È½ï¿½ï¿½É´Ë·ï¿½ï¿½ï¿½
 				log.saveLog(2,"[CD S to D]>Begin a Source to Destination compare"+"\n");
 				for(int i=0;i<sdvlLength;i++){
 						for(int j=0;j<ddvlLength;j++){
@@ -119,7 +123,7 @@ public class CompareData{
 				System.out.println("\n");
 				System.out.println("[CD S to D] >Finished a Source to Destination compare");
 				log.saveLog(2,"[CD S to D]>A Source to Destination compare finished."+"\n");
-				System.out.println("[CD D to S] >Begin a Destination to Source compare");	//Ä¿±êµ½Ô´µÄ±È½Ï£¬ÅÐ¶¨Õû¿éÉ¾³ýµÄÇé¿ö
+				System.out.println("[CD D to S] >Begin a Destination to Source compare");	//Ä¿ï¿½êµ½Ô´ï¿½Ä±È½Ï£ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				log.saveLog(2,"[CD D to S]>Begin a Destination to Source compare"+"\n");
 				for(int i=0;i<ddvlLength;i++){
 						for(int j=0;j<sdvlLength;j++){
@@ -186,7 +190,7 @@ public class CompareData{
 				String dtcolumnname,dtcolumntype;
 				int dtcolumnleng;
 				
-				//×·¼Ósis_ori_rowid,opdateÁÐÖÁÐÂ±í
+				//×·ï¿½ï¿½sis_ori_rowid,opdateï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½
 				sql2 = "CREATE TABLE "+dtablename+" (sis_ori_rowid varchar2(32) primary key";
 				//sql2 = "CREATE TABLE "+dtablename+" (sis_ori_rowid rowid primary key";
 				sql2 = sql2 + " , sis_des_optime Date default SYSDATE , sis_des_rowidsn number(32)";
@@ -196,7 +200,7 @@ public class CompareData{
 						dtcolumntype = rsmd.getColumnTypeName(y);
 						dtcolumnleng = rsmd.getColumnDisplaySize(y);
 						if ( ! (dtcolumntype.equals("ROWID"))){
-								//if (! ((dtcolumntype.equals("DATE")) || (dtcolumntype.equals("LONG")) || (dtcolumntype.equals("NUMBER")) || (dtcolumntype.equals("BLOB")) ||  (dtcolumntype.equals("CLOB")))){ Èç¹ûÏ£ÍûÄÜ×Ô¶¯ÅÐ¶ÏdataÀàÐÍµÈ£¬ÇëÔÚÕâÀï¼ÌÐø±àÂë£¬Ôö¼Ó¼ÇÂ¼dataÀàÐÍµÄindexÊý×é£¬ÒÔ±ãÔÚÉú³ÉinsertÓï¾äÖÐ¶ÔÓ¦Î»ÖÃÊ¹ÓÃto_date()
+								//if (! ((dtcolumntype.equals("DATE")) || (dtcolumntype.equals("LONG")) || (dtcolumntype.equals("NUMBER")) || (dtcolumntype.equals("BLOB")) ||  (dtcolumntype.equals("CLOB")))){ ï¿½ï¿½ï¿½Ï£ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Ð¶ï¿½dataï¿½ï¿½ï¿½ÍµÈ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½Ó¼ï¿½Â¼dataï¿½ï¿½ï¿½Íµï¿½indexï¿½ï¿½ï¿½é£¬ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½insertï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ó¦Î»ï¿½ï¿½Ê¹ï¿½ï¿½to_date()
 								if (! ((dtcolumntype.equals("DATE")) || (dtcolumntype.equals("LONG")) || (dtcolumntype.equals("NUMBER")) || (dtcolumntype.equals("BLOB")) ||  (dtcolumntype.equals("CLOB")))){
 										sql2 = sql2 +" , "+dtcolumnname+" "+dtcolumntype+"("+dtcolumnleng+")";
 								}else{
@@ -291,7 +295,7 @@ public class CompareData{
 	  	}
 	
 	//------------------------------------------------------------------------------------			
-		public String getMd5(Data tempdata , int offset){ //offset±íÊ¾´ÓµÚ¼¸ÁÐ¿ªÊ¼È¡Êý¾Ý£¬±£Ö¤×·¼ÓµÄ×Ö¶ÎÔÚ±íµÄ×îÇ°nÁÐ ·µ»ØMD5Öµ
+		public String getMd5(Data tempdata , int offset){ //offsetï¿½ï¿½Ê¾ï¿½ÓµÚ¼ï¿½ï¿½Ð¿ï¿½Ê¼È¡ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Ö¤×·ï¿½Óµï¿½ï¿½Ö¶ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ç°nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½MD5Öµ
 				int tsize = tempdata.getSize();
 				String output;
 				output = "";
@@ -304,7 +308,7 @@ public class CompareData{
 		}
 
 //------------------------------------------------------------------------------------			
-		public String getMd5OriStr(Data tempdata , int offset){ //offset±íÊ¾´ÓµÚ¼¸ÁÐ¿ªÊ¼È¡Êý¾Ý£¬±£Ö¤×·¼ÓµÄ×Ö¶ÎÔÚ±íµÄ×îÇ°nÁÐ ·µ»ØString
+		public String getMd5OriStr(Data tempdata , int offset){ //offsetï¿½ï¿½Ê¾ï¿½ÓµÚ¼ï¿½ï¿½Ð¿ï¿½Ê¼È¡ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Ö¤×·ï¿½Óµï¿½ï¿½Ö¶ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ç°nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½String
 				int tsize = tempdata.getSize();
 				String output;
 				output = "";
@@ -316,7 +320,7 @@ public class CompareData{
 		}
 
 //------------------------------------------------------------------------------------			
-		public long getMd5OriLong(Data tempdata , int offset){ //offset±íÊ¾´ÓµÚ¼¸ÁÐ¿ªÊ¼È¡Êý¾Ý£¬±£Ö¤×·¼ÓµÄ×Ö¶ÎÔÚ±íµÄ×îÇ°nÁÐ ·µ»ØString
+		public long getMd5OriLong(Data tempdata , int offset){ //offsetï¿½ï¿½Ê¾ï¿½ÓµÚ¼ï¿½ï¿½Ð¿ï¿½Ê¼È¡ï¿½ï¿½Ý£ï¿½ï¿½ï¿½Ö¤×·ï¿½Óµï¿½ï¿½Ö¶ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ç°nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½String
 				int tsize = tempdata.getSize();
 				long  output;
 				output = 0;
@@ -443,10 +447,10 @@ public class CompareData{
 	
 	
 //------------------------------------------------------------------------------------			
-		public void executeSqlCommand(){ // Ö´ÐÐsis.sqlcommand±íÖÐËùÓÐµÄsqlÓï¾ä
-			//sql0 ÓÃÓÚÖÃsqlÖ´ÐÐÍê³ÉºóµÄ×´Ì¬
-			//sql1 Ñ¡È¡sqlcommand±íÖÐËùÓÐÉÐÎ´Ö´ÐÐµÄsqlÓï¾ä
-			//sql2 Ö´ÐÐsqlÓï¾äµÄÔØÌå
+		public void executeSqlCommand(){ // Ö´ï¿½ï¿½sis.sqlcommandï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½sqlï¿½ï¿½ï¿½
+			//sql0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sqlÖ´ï¿½ï¿½ï¿½ï¿½Éºï¿½ï¿½×´Ì¬
+			//sql1 Ñ¡È¡sqlcommandï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´Ö´ï¿½Ðµï¿½sqlï¿½ï¿½ï¿½
+			//sql2 Ö´ï¿½ï¿½sqlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 				
 					String sql1,sql0,sql3;
 					sql1 = "SELECT sqltext,sourcename FROM sqlcommand order by sqlsn desc";
@@ -541,7 +545,7 @@ public class CompareData{
 
 
 //------------------------------------------------------------------------------------			
-		public void paraCompareDv(DataVector sdv,DataVector ddv){ //Æ½ÐÐ±È½Ï
+		public void paraCompareDv(DataVector sdv,DataVector ddv){ //Æ½ï¿½Ð±È½ï¿½
 				boolean sqlflag;
 				String[][] sstrarr;
 				String[][] dstrarr;
@@ -556,13 +560,13 @@ public class CompareData{
 						}
 		}
 	//------------------------------------------------------------------------------------
-	public boolean paraCompareStrArr(String[][] sstrarr,String[][] dstrarr,DataVector sdv){ //Æ½ÐÐ±È½ÏString Array
+	public boolean paraCompareStrArr(String[][] sstrarr,String[][] dstrarr,DataVector sdv){ //Æ½ï¿½Ð±È½ï¿½String Array
 		try{
-				String dTable = xmlReader.getFromConf("DTABLE",confFile); 		//ÎªÁËÈ·¶¨±íÖÐµÄÁÐÃû£¬ÒÔ´Ë±íÎªÁÐµÄ±ê×¼
+				String dTable = xmlReader.getFromConf("DTABLE",confFile); 		//Îªï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ë±ï¿½Îªï¿½ÐµÄ±ï¿½×¼
 				String sTable = xmlReader.getFromConf("STABLE",confFile);
 				boolean sqlflag;
 				sqlflag = false;
-				Data tData = new Data();						//ÓÃÓÚ¼ÇÂ¼Ò»Ìõ¼ÍÂ¼µÄÐÅÏ¢
+				Data tData = new Data();						//ï¿½ï¿½ï¿½Ú¼ï¿½Â¼Ò»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Ï¢
 				SfToDec sftd;
 				sftd = new SfToDec();
 				String sql1;
@@ -574,12 +578,12 @@ public class CompareData{
 				showStrArr(dstrarr);*/
 				boolean lastDel;
 				lastDel = false;
-				for(int t = 0 ;t<(sstrarr.length);t++){		//Æ½ÐÐ±È½Ï´ÎÊý
-					if(!(sstrarr[t][1].equals(dstrarr[t][1]))){	//·¢ÏÖÁ½±ßÊý×é³öÏÖÖµ²»Í¬µÄÇé¿ö
+				for(int t = 0 ;t<(sstrarr.length);t++){		//Æ½ï¿½Ð±È½Ï´ï¿½ï¿½ï¿½
+					if(!(sstrarr[t][1].equals(dstrarr[t][1]))){	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½
 							//System.out.println(sstrarr[t][1]+" |||| "+dstrarr[t][1]);
 							sqlflag = false;
-							//if((sstrarr[t][0].equals("*")) && ( ! dstrarr[t][0].equals("*"))){ //Ô´²»´æÔÚ¼ÇÂ¼£¬Ä¿±ê´æÔÚ£¬ÈÏÎªÔ´·¢ÉúÁËÊý¾ÝÉ¾³ý
-							if((sstrarr[t][0].equals(_emptyChar)) && ( ! dstrarr[t][0].equals(_emptyChar))){ //Ô´²»´æÔÚ¼ÇÂ¼£¬Ä¿±ê´æÔÚ£¬ÈÏÎªÔ´·¢ÉúÁËÊý¾ÝÉ¾³ý
+							//if((sstrarr[t][0].equals("*")) && ( ! dstrarr[t][0].equals("*"))){ //Ô´ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ÎªÔ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½
+							if((sstrarr[t][0].equals(_emptyChar)) && ( ! dstrarr[t][0].equals(_emptyChar))){ //Ô´ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ÎªÔ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½
 									sql1 = "DELETE FROM "+dTable+" WHERE sis_ori_rowid = '"+dstrarr[t][0]+"'";
 									sqlflag = true;
 									//lastDel = true;
@@ -587,7 +591,7 @@ public class CompareData{
 									deleteTime ++;
 							}
 							
-							if(! (sstrarr[t][0].equals(_emptyChar)) && ( (dstrarr[t][0].equals(_emptyChar)))){ //Ô´´æÔÚ¼ÇÂ¼£¬Ä¿±ê²»´æÔÚ£¬ÈÏÎªÔ´·¢ÉúÁËÊý¾ÝÔö¼Ó
+							if(! (sstrarr[t][0].equals(_emptyChar)) && ( (dstrarr[t][0].equals(_emptyChar)))){ //Ô´ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½Ä¿ï¿½ê²»ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ÎªÔ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 									//if (lastDel == true){i++;lastDel = false;}
 									//System.out.println("current i is "+i+" sdv.lenth=" + sdv.getDataVectorSize());
 									//tData = sdv.getFromDataVector(i);
@@ -609,7 +613,7 @@ public class CompareData{
 									insertTime ++;
 							}
 							
-							if(! (sstrarr[t][0].equals(_emptyChar)) && ( !(dstrarr[t][0].equals(_emptyChar)))){ //Ô´Ä¿±ê¾ù´æÔÚ¼ÇÂ¼£¬ÈÏÎª·¢ÉúÁËÔ´Êý¾Ý±ä¸ü
+							if(! (sstrarr[t][0].equals(_emptyChar)) && ( !(dstrarr[t][0].equals(_emptyChar)))){ //Ô´Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½Ú¼ï¿½Â¼ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ï¿½ï¿½Ý±ï¿½ï¿½
 									//if (lastDel == true){i++;lastDel = false;}
 									//System.out.println(sdv.getDataVectorSize()+" "+i);
 									tData = sdv.getFromDataVectorBySn(sstrarr[t][0]);
@@ -653,8 +657,8 @@ public class CompareData{
 	
 
 //------------------------------------------------------------------------------------
-	  public String[][] getStringArray(DataVector dv1,DataVector dv2,int offset){ //´ÓÁ½¸ödv¾ö¶¨String ArrayµÄ´óÐ¡£¬²¢ÇÒ½«dv1µÄÊý¾ÝÌîÐ´µ½String ArrayÖÐ
-	  	//offset ±íÊ¾ÔÚdvÖÐµÄÁÐÊý£¬ÀýÈçd_table×·¼ÓÁË3¸öÁÐ,ÄÇÃ´ÎªÁËºÍs_tableÖÐÁÐµÄÊýÁ¿Ò»ÖÂ,ÔÚ´Ë±íÃ÷ÁÐÆ«ÒÆÁ¿
+	  public String[][] getStringArray(DataVector dv1,DataVector dv2,int offset){ //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dvï¿½ï¿½ï¿½ï¿½String Arrayï¿½Ä´ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½Ò½ï¿½dv1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½String Arrayï¿½ï¿½
+	  	//offset ï¿½ï¿½Ê¾ï¿½ï¿½dvï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½d_table×·ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ã´Îªï¿½Ëºï¿½s_tableï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½,ï¿½Ú´Ë±ï¿½ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½
 	  	SfToDec sftd;
 			sftd = new SfToDec();
 	  	int firstrowid,lastrowid;
@@ -707,7 +711,7 @@ public class CompareData{
 									strarr[tt][1] = Long.toString(getMd5OriLong(tData,offset));
 						}
 						
-				//System.out.println("~~:Out of FILL String Array £¬ Total insert(not *) = "+ i);
+				//System.out.println("~~:Out of FILL String Array ï¿½ï¿½ Total insert(not *) = "+ i);
 			return strarr;
 	}
 	
@@ -739,7 +743,7 @@ public class CompareData{
 						String sql2;
 						String dtcolumnname,dtcolumntype;
 						int dtcolumnleng;
-						//×·¼Ósis_ori_rowid,opdateÁÐÖÁÐÂ±í
+						//×·ï¿½ï¿½sis_ori_rowid,opdateï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½
 						for (;rst1.next();){
 							for(int y = 3;y < (numberOfColumns+1);y++){
 								dtcolumnname = rsmd.getColumnName(y);

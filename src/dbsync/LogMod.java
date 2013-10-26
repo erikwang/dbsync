@@ -6,7 +6,8 @@ import java.text.*;
 
 public class LogMod{
 				DbConn sdb,ddb,sysdb,sysdb1;
-				String confFile = "./dbsync/conf/config.xml";
+				//String confFile = "./dbsync/conf/config.xml";
+                                String confFile = "conf/config.xml";
 				xmlReader xmlReader;
 				String logDest;
 				String logFileName;	

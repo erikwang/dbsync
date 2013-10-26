@@ -20,7 +20,8 @@ public class Syncdb extends Thread{
 		log = new LogMod();
 		String _logFileName = log.logFileName;
 		System.out.println("LOGFILENAME:"+_logFileName);
-		String _confFile = "./dbsync/conf/config.xml";
+		//String _confFile = "./dbsync/conf/config.xml";
+                String _confFile = "conf/config.xml";
 		Vector<String> syncList;
 		syncList = new Vector<String>();
 		syncList = xmlReader.getListFromConf("DBSYNC",_confFile);
@@ -74,7 +75,7 @@ public class Syncdb extends Thread{
 								String DCOLUMNS,DCOLUMNS1;
 								DCOLUMNS = "sis_ori_rowid,sis_des_optime,sis_des_rowidsn "+SCOLUMNS[0];
 								DCOLUMNS1 = "sis_ori_rowid,sis_des_optime,sis_des_rowidsn "+SCOLUMNS[1];
-								//SCOLUMNS = ROWIDNAME+" "+SCOLUMNS;		//ÈôsouÃ»ÓÐÔ¤ÏÈÌá³öµÄROWID,¶øÊÇÀàËÆviewÖÐÌá¹©µÄrid...
+								//SCOLUMNS = ROWIDNAME+" "+SCOLUMNS;		//ï¿½ï¿½souÃ»ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ROWID,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½viewï¿½ï¿½ï¿½á¹©ï¿½ï¿½rid...
 								//SCOLUMNS = "ROWID "+SCOLUMNS;		
 								int dvllength;
 								SfToDec sftd;
@@ -95,7 +96,7 @@ public class Syncdb extends Thread{
 								
 								System.out.println("[Engine]__________________ End of Phase 2 __________________");
 								log.saveLog(2,"[DB] Database dump finished.\n");
-								//±£³ÖsqlÓï¾äÖÐ¶ÁÈëµÄ×Ö¶ÎÒ»Ò»¶ÔÓ¦
+								//ï¿½ï¿½ï¿½ï¿½sqlï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½Ò»Ò»ï¿½ï¿½Ó¦
 																
 								System.out.println("\n[Engine] ==== Phase 3:Compare.==============================");
 								log.saveLog(2,"[Engine] >>>> Phase 3:Compare.\n");
@@ -153,7 +154,7 @@ public class Syncdb extends Thread{
 										System.out.println("[DDB] Read  "+requeststart+" TO "+requestend+" started @ "+new java.util.Date());
 										log.saveLog(2,"[DB] Read from d-database started , with sql: "+sqld+"\n");
 										ddvl = ddvl.readFromDatabase("des",sqld,confFile,duser,dpswd);
-										/*cd.showDatavectorList(ddvl); ²âÊÔDVLÊÇ·ñÕýÈ·µÄ´úÂë
+										/*cd.showDatavectorList(ddvl); ï¿½ï¿½ï¿½ï¿½DVLï¿½Ç·ï¿½ï¿½ï¿½È·ï¿½Ä´ï¿½ï¿½ï¿½
 										System.out.println("---------------------------------------------");
 										cd.showDatavectorList(sdvl);*/
 										System.out.println("[CD] Compare started @ "+new java.util.Date());		
