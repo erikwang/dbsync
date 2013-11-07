@@ -67,6 +67,15 @@ public class Syncdb extends Thread{
 								String duser = xmlReader.getFromConf("DUSER",confFile);
 								String spswd = xmlReader.getFromConf("SPSWD",confFile);
 								String dpswd = xmlReader.getFromConf("DPSWD",confFile);
+                                                                
+                                                                //get FD config information from xml for each sync
+                                                                int fdid = new Integer(xmlReader.getFromConf("FID",confFile)).intValue();
+                                                                String fdattr = xmlReader.getFromConf("FATTR",confFile);
+                                                                String fdoperator = xmlReader.getFromConf("FOPER",confFile);
+                                                                String fdvalue = xmlReader.getFromConf("FVALUE",confFile);
+                                                                System.out.println("[Engine] Match a Functional Dependency -> ID:"+fdid+" "+fdattr+" "+fdoperator+" "+fdvalue);
+                                                                FunctionalDependency fd = new FunctionalDependency(2,fdid,fdattr,fdoperator,new Float(fdvalue).floatValue());
+                                                                
 								int offset = Integer.parseInt(xmlReader.getFromConf("OFFSET",confFile));
 								CompareData cd;
 								cd = new CompareData(_logFileName,confFile);
@@ -94,6 +103,17 @@ public class Syncdb extends Thread{
 								
 								cd.dumpDatabaseTable("sou","des",STABLE,DTABLE);
 								
+                                                                System.out.println("[Engine] Column list");
+                                                                
+                                                                
+                                                                // test if can find source side table columns name
+                                                                Vector<String> scolumnnames = cd.getColumnName(STABLE,"s");
+                                                                
+                                                                for( int t = 0; t < cd.getColumnName(STABLE,"s").size();t++){
+                                                                   System.out.println("[Engine] | "+cd.getColumnName(STABLE,"s").get(t)+" |");
+                                                                }
+                                                                
+                                                                
 								System.out.println("[Engine]__________________ End of Phase 2 __________________");
 								log.saveLog(2,"[DB] Database dump finished.\n");
 								//����sql����ж�����ֶ�һһ��Ӧ
@@ -159,8 +179,17 @@ public class Syncdb extends Thread{
 										cd.showDatavectorList(sdvl);*/
 										System.out.println("[CD] Compare started @ "+new java.util.Date());		
 										log.saveLog(2,"[ENGINE] Starting "+(lt+1)+" of "+looptime+"\n");
-										cd.compareDataVectorList(sdvl,ddvl); //Every foe start here orz
-										System.out.println("[Engine] End of "+(lt+1)+" of "+looptime);
+										
+                                                                                
+                                                                                ////
+                                                                                cd.setFd(fd);
+                                                                                cd.setScolumnnames(scolumnnames);
+                                                                                cd.compareDataVectorList(sdvl,ddvl); //Every foe start here orz
+                                                                                
+										
+                                                                                ////
+                                                                                
+                                                                                System.out.println("[Engine] End of "+(lt+1)+" of "+looptime);
 										System.out.println("[Summary] Matched :"+cd.matchTime+" | Insert :"+cd.insertTime+" | Delete:"+cd.deleteTime+" | Update:"+cd.updateTime+" |SQL Produce/Execute/Logged:"+cd.savedSql+"/"+cd.executedSql+"/"+cd.loggedSql+"\n");
 										log.saveLog(2,"[Engine] End of "+(lt+1)+"/"+looptime+".\n");
 										log.saveLog(2,"[Summary] Matched :"+cd.matchTime+" | Insert :"+cd.insertTime+" | Delete:"+cd.deleteTime+" | Update:"+cd.updateTime+" |SQL Produce/Execute/Logged:"+cd.savedSql+"/"+cd.executedSql+"/"+cd.loggedSql+"\n");

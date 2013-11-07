@@ -8,6 +8,7 @@ import oracle.sql.*;
 public class DataVectorList{
 		Vector<DataVector> datavectorlist;
 		int reslength;
+                //Vector<String> attributelist;
 		
 		
 //------------------------------------------------------------------------------------		
@@ -27,8 +28,8 @@ public class DataVectorList{
 		public DataVector get(int __index){
 			return datavectorlist.get(__index);	
 		}
-				
-		
+				              
+                
 //------------------------------------------------------------------------------------
 		public DataVector getDataVector(String index){
 				for(int i=0;i<datavectorlist.size();i++){
@@ -77,6 +78,7 @@ public class DataVectorList{
 				rst1 = stmt1.executeQuery(sql1);
 				ResultSetMetaData rsmd = rst1.getMetaData();
 				int numberOfColumns = rsmd.getColumnCount();
+                               
 				for (;rst1.next();){
 					for(int y = 1;y < (numberOfColumns+1);y++){
 						//System.out.println(rst1.getString(rsmd.getColumnName(y)));

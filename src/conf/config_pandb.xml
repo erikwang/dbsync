@@ -18,15 +18,18 @@
 						<DTABLE>PANDB.DUMP_PANDB2</DTABLE>
 						<DUSER>pandb</DUSER>
 						<DPSWD>pandb</DPSWD>
+                                                
+                                                <FD>
+                                                    <FID>1</FID>
+                                                    <FATTR>VALUE</FATTR>
+                                                    <FOPER>great</FOPER>
+                                                    <FVALUE>1000.05</FVALUE>
+                                                </FD>
 				</DESTINATION>
 		  </DBSOURCE>
 	   	<EMPTYCHAR>*</EMPTYCHAR>
 		</SIS>
 	<ROWID>ROWID</ROWID>
-        <FD>
-            <ID>1</ID>
-            <LHS>buildingid</LHS>
-            <RHS>buildingname</RHS>
-        </FD>
+
 
 </SYSTEM>

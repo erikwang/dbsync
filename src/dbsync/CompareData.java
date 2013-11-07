@@ -20,8 +20,42 @@ public class CompareData{
 				boolean tbCreateFlag = false;
 				LogMod log;
 				String _emptyChar; //���dvl or StrArr��Ϊ�յ�λ�ã���ʲô�ַ�����
-			
-				
+                                FunctionalDependency fd;
+                                Vector<String> scolumnnames;
+
+    public void setScolumnnames(Vector<String> scolumnnames) {
+        this.scolumnnames = scolumnnames;
+    }
+                                
+public void setFd(FunctionalDependency _fd){
+    this.fd = _fd;
+}
+
+
+//------------------------------------------------------------------------------------
+
+public boolean checkFD(Data _data, FunctionalDependency fd){
+    String pivot = fd.getAttribute();
+    int pindex = getIndexOfColumn(pivot,scolumnnames);
+    pindex++;
+    String operator = fd.getOperator();
+    
+    System.out.println("[ENG][DEBUG] size:"+_data.getSize());
+    for(int t = 0 ;t < _data.getSize(); t++){
+        System.out.println("[ENG][DEBUG]"+_data.getDataInfo(t));
+    }
+    
+    if (operator.equals("great")){
+        System.out.print("[Eng][FD] Catch a >= ");
+        System.out.println("[Eng][Debug]"+new Float(_data.getDataInfo(pindex)).floatValue()+"  "+fd.getValue());
+        if(new Float(_data.getDataInfo(pindex)).floatValue() >= fd.getValue()){
+            return true;
+        }
+    }
+    System.out.print("[Eng][FD] Noting...");
+    return false;
+}
+
 			
 //------------------------------------------------------------------------------------		
 		public CompareData(String _logFileName,String _confFile){
@@ -103,7 +137,7 @@ public class CompareData{
 												//System.out.println("[CD S to D] Find a equal Index "+sdvl.get(i).getIndex()+", Entering parallel compare MOD...");
 												System.out.print(">");
 												log.saveLog(3,"[CD S to D] Find a equal Index "+sdvl.get(i).getIndex()+", Entering parallel compare MOD..."+"\n");
-												paraCompareDv(sdvl.get(i),ddvl.get(j));
+												paraCompareDv(sdvl.get(i),ddvl.get(j));  // Enter para compare
 												flag = true;
 												log.saveLog(3,"[CD S to D] Index "+sdvl.get(i).getIndex()+" Parallel compare done!"+"\n");
 										}
@@ -377,7 +411,9 @@ public class CompareData{
 	
 	//------------------------------------------------------------------------------------			
 		public void dumpDvData(String datasource,String dtablename,String stablename,DataVector dv){ //First time dump data to destination table
-				SfToDec sftd;
+				
+                                int executeflag = 0;
+                                SfToDec sftd;
 				sftd = new SfToDec();
 				String sql1;
 				Data tempdata;
@@ -399,8 +435,11 @@ public class CompareData{
 						
 					}
 					sql1 = sql1 + ")";
-					saveSqlCommand(sql1,stablename); //save the sqltext to sis.sqlcommand;
-					insertTime ++;
+					saveSqlCommand(sql1,stablename,executeflag); //save the sqltext to sis.sqlcommand;
+					//if(boolean fdflag = true){
+                                            
+                                        //}
+                                        insertTime ++;
 				}
 				executeSqlCommand(); // execute all sqltext in sis.sqlcommand and turn stat = 1;
 				
@@ -408,7 +447,8 @@ public class CompareData{
 		
 	//------------------------------------------------------------------------------------			
 		public void removeDvData(String datasource,String dtablename,String stablename,DataVector dv){
-				String sql1;
+				int executeflag = 0;
+                                String sql1;
 				sql1 ="";
 				Data tempdata;
 				tempdata = new Data();
@@ -417,21 +457,21 @@ public class CompareData{
 					tempdata = dv.getFromDataVector(t);
 					String srowid = (String)tempdata.getDataInfo(0);
 					sql1 = "DELETE FROM "+dtablename+" WHERE SIS_ORI_rowid = '"+srowid+"'";
-					saveSqlCommand(sql1,stablename);
+					saveSqlCommand(sql1,stablename,executeflag);
 					deleteTime ++;
 				}	
 				executeSqlCommand(); // execute all sqltext in sis.sqlcommand and turn stat = 1;
 		}
 		
 	//------------------------------------------------------------------------------------			
-		public void saveSqlCommand(String sql1,String sname){ //save a sql text to sis.sqlcommand
+		public void saveSqlCommand(String sql1,String sname, int executeflag){ //save a sql text to sis.sqlcommand
 			//database user:sis | table name:sqlcommand
 				try{
 					String sql0;
 					Statement stmt1 = sysdb.createStatement();
 					sql1 = sql1.replace("'","''");
 					
-					sql0 = "INSERT INTO sqlcommand(sqltext,sqlsn,sourcename)values('"+sql1+"',seq_sis_sqlcommand.nextval,'"+sname+"')";
+					sql0 = "INSERT INTO sqlcommand(sqltext,sqlsn,sourcename,executeflag)values('"+sql1+"',seq_sis_sqlcommand.nextval,'"+sname+"',"+executeflag+")";
 					stmt1.executeQuery(sql0);
 					savedSql ++;
 					
@@ -453,7 +493,8 @@ public class CompareData{
 			//sql2 ִ��sql��������
 				
 					String sql1,sql0,sql3;
-					sql1 = "SELECT sqltext,sourcename FROM sqlcommand order by sqlsn desc";
+					// whether there is a excuteflag
+                                        sql1 = "SELECT sqltext,sourcename FROM sqlcommand where executeflag = 0 order by sqlsn desc";
 					String sql2="";
 					String source ="";
 					ResultSet rst1 = null;
@@ -508,7 +549,8 @@ public class CompareData{
 									System.out.println("[DBe2] Exception from executeSql:"+e2);
 									log.saveLog(1,"\n[!!!EXCEPTION!!!eee] Exception from execute SQL:"+e2+"\n");
 					}
-										sql3 = "delete from sqlcommand";
+                                                                                // remove those executed SQL - if executeflag = 0
+										sql3 = "delete from sqlcommand where executeflag =0";
 										try{
 											Statement stmt3 = sysdb.createStatement();
 											stmt3.executeQuery(sql3);
@@ -549,7 +591,7 @@ public class CompareData{
 				boolean sqlflag;
 				String[][] sstrarr;
 				String[][] dstrarr;
-						sstrarr = getStringArray(sdv,ddv,2);
+						sstrarr = getStringArray(sdv,ddv,2);  ////??????????????????
 						//showStrArr(sstrarr);
 						dstrarr = getStringArray(ddv,sdv,4);
 						//showStrArr(dstrarr);
@@ -562,7 +604,8 @@ public class CompareData{
 	//------------------------------------------------------------------------------------
 	public boolean paraCompareStrArr(String[][] sstrarr,String[][] dstrarr,DataVector sdv){ //ƽ�бȽ�String Array
 		try{
-				String dTable = xmlReader.getFromConf("DTABLE",confFile); 		//Ϊ��ȷ�����е������Դ˱�Ϊ�еı�׼
+                                int executeflag = 0;
+                                String dTable = xmlReader.getFromConf("DTABLE",confFile); 		//Ϊ��ȷ�����е������Դ˱�Ϊ�еı�׼
 				String sTable = xmlReader.getFromConf("STABLE",confFile);
 				boolean sqlflag;
 				sqlflag = false;
@@ -616,10 +659,23 @@ public class CompareData{
 							if(! (sstrarr[t][0].equals(_emptyChar)) && ( !(dstrarr[t][0].equals(_emptyChar)))){ //ԴĿ�����ڼ�¼����Ϊ������Դ��ݱ��
 									//if (lastDel == true){i++;lastDel = false;}
 									//System.out.println(sdv.getDataVectorSize()+" "+i);
-									tData = sdv.getFromDataVectorBySn(sstrarr[t][0]);
+									
+                                                            
+                                                        
+                                                                        tData = sdv.getFromDataVectorBySn(sstrarr[t][0]);
+                                                                        
+                                                                   
+                                                                        if(checkFD(tData,fd)){
+                                                                            executeflag = 1;
+                                                                            System.out.println("[Eng][FD] Found a violated~~~~~~~~~~~~~");
+                                                                        }else{
+                                                                            executeflag = 0;
+                                                                        }
+                                                                        
+                                                                        
 									Vector<String> vColumnName;
 									vColumnName = new Vector<String>();			
-									vColumnName = getColumnName(dTable);
+									vColumnName = getColumnName(dTable,"d");
 									sql1 = "UPDATE "+dTable+" SET SIS_DES_OPTIME = SYSDATE";
 									for(int k = 1;k<vColumnName.size();k++){
 										if (tData.getDataInfo(k) == null){
@@ -642,7 +698,7 @@ public class CompareData{
 							log.saveLog(2,"---------->>D "+dstrarr[t][0]+"----"+dstrarr[t][1]+"\n");
 							log.saveLog(2,"[PCDSQL] "+sql1+"\n");
 							if (sqlflag){
-								saveSqlCommand(sql1,sTable);
+								saveSqlCommand(sql1,sTable,executeflag); // Prepare for an update
 							}
 					}else{
 						//if (lastDel == true){i++;lastDel = false;}
@@ -728,8 +784,13 @@ public class CompareData{
 
 
 //------------------------------------------------------------------------------------
-	public Vector<String> getColumnName(String tablename){
-				Vector<String> vColumnName;
+	public Vector<String> getColumnName(String tablename,String side){
+				int iter = 0;
+                                if(side.equals("s")){
+                                iter = 1;} else {
+                                iter = 3;
+                                }
+                                Vector<String> vColumnName;
 				vColumnName = new Vector<String>();
 				/*DbConn ddb;*/
 				try{
@@ -745,8 +806,8 @@ public class CompareData{
 						int dtcolumnleng;
 						//׷��sis_ori_rowid,opdate�����±�
 						for (;rst1.next();){
-							for(int y = 3;y < (numberOfColumns+1);y++){
-								dtcolumnname = rsmd.getColumnName(y);
+							for(;iter < (numberOfColumns+1);iter++){
+								dtcolumnname = rsmd.getColumnName(iter);
 								vColumnName.add(dtcolumnname);		
 							}
 						}
@@ -758,6 +819,17 @@ public class CompareData{
 	}
 
 
+        //------------------------------------------------------------------------------------
+	public int getIndexOfColumn(String columnname,Vector<String>columnlist){ // if I have a column name, it returns the column sequence id of the name
+            for(int t = 0 ; t < columnlist.size();t++){
+                if(columnname.equals(columnlist.get(t))){
+                    return t;
+                }
+            }
+            return -1;
+        }        
+        
+        
 //------------------------------------------------------------------------------------
 	public int getLoopTime(int dvllength,int offset){
 				return (int)Math.floor((dvllength / offset)) + 1;
