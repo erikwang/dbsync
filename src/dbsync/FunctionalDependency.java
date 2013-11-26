@@ -11,9 +11,9 @@ package dbsync;
 public class FunctionalDependency {
     int fdtype; // 1 = string; 2 = numeric
     int id;
-    String attribute;
+    String attribute; // LHS
     String operator;
-    float value;
+    float value; // RHS
 
     public float getValue() {
         return value;

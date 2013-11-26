@@ -25,6 +25,20 @@
                                                     <FOPER>great</FOPER>
                                                     <FVALUE>1000.05</FVALUE>
                                                 </FD>
+                                                
+                                                <CFD>
+                                                    <CFDID>1</CFDID>
+                                                    <CLHS>
+                                                        <CLATTR>MEASURENAME</CLATTR>
+                                                        <CLATTR>BLDG</CLATTR>
+                                                        <CLVALUE>XRAY CHILLED WATER</CLVALUE>
+                                                        <CLVALUE>ABB_HX</CLVALUE>
+                                                    </CLHS>
+                                                    <CRHS>
+                                                        <CRATTR>NAME</CRATTR>
+                                                        <CRVALUE>XRAYRWT</CRVALUE>
+                                                    </CRHS>
+                                                </CFD>
 				</DESTINATION>
 		  </DBSOURCE>
 	   	<EMPTYCHAR>*</EMPTYCHAR>

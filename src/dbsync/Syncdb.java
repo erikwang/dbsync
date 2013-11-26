@@ -27,6 +27,13 @@ public class Syncdb extends Thread{
 		syncList = xmlReader.getListFromConf("DBSYNC",_confFile);
 		int synctime  = Integer.parseInt(xmlReader.getFromConf("SYNCTIME",_confFile)); 
 		
+                
+                //for support FD and CFD
+                FunctionalDependency fd = null;
+                ConditionalFunctionalDependency cfd = null;
+                //////////////
+                
+                
 		System.out.println("//////////////////////////////////////////////////////////////////////////");
 		System.out.println("::::::Database Sync Engine V-1.1 get ready @ "+new java.util.Date());
 		System.out.println("[SYS] Log saved in file:"+_logFileName);
@@ -70,13 +77,69 @@ public class Syncdb extends Thread{
                                                                 
                                                                 //get FD config information from xml for each sync
                                                                 int fdid = new Integer(xmlReader.getFromConf("FID",confFile)).intValue();
+                                                                System.out.println("[DEBUG][CONSTRAINTS][LOADFROMXML]"+fdid);
                                                                 String fdattr = xmlReader.getFromConf("FATTR",confFile);
                                                                 String fdoperator = xmlReader.getFromConf("FOPER",confFile);
                                                                 String fdvalue = xmlReader.getFromConf("FVALUE",confFile);
                                                                 System.out.println("[Engine] Match a Functional Dependency -> ID:"+fdid+" "+fdattr+" "+fdoperator+" "+fdvalue);
-                                                                FunctionalDependency fd = new FunctionalDependency(2,fdid,fdattr,fdoperator,new Float(fdvalue).floatValue());
+                                                                fd = new FunctionalDependency(2,fdid,fdattr,fdoperator,new Float(fdvalue).floatValue());
                                                                 
-								int offset = Integer.parseInt(xmlReader.getFromConf("OFFSET",confFile));
+                                                               
+                                                                
+                                                                //get CFD config information from xml for each sync
+                                                                if (! xmlReader.getFromConf("CFDID",confFile).equals(null)){
+                                                                    int cfdid = new Integer(xmlReader.getFromConf("CFDID",confFile)).intValue();
+                                                                    //System.out.println("[DEBUG][CONSTRAINTS][LOADFROMXML][CFD]"+cfdid);
+                                                                    Vector<String> cfdlattr = new Vector<String>();
+                                                                    Vector<String> cfdlvalue = new Vector<String>();
+                                                                    cfdlattr = xmlReader.getListFromConf("CLATTR",confFile);
+                                                                    cfdlvalue = xmlReader.getListFromConf("CLVALUE",confFile);
+                                                                    //System.out.println("[ENGINE][CFD][LHS] - # of cfdlattr" + cfdlattr.size());
+                                                                    
+                                                                    Vector<String> cfdrattr = new Vector<String>();
+                                                                    cfdrattr = xmlReader.getListFromConf("CRATTR",confFile);
+                                                                    Vector<String> cfdrvalue = new Vector<String>();
+                                                                    cfdrvalue = xmlReader.getListFromConf("CRVALUE",confFile);
+                                                                    
+                                                                    Vector<String[]> LHS = new Vector<String[]>();
+                                                                    Vector<String[]> RHS = new Vector<String[]>();
+                                                                    
+                                                                    
+                                                                    if(cfdlattr.size() != cfdlvalue.size()){
+                                                                        System.out.println("[ENGINE][CFD][LHS] Error - # of LHS attributes and values don't mathch, CFD" + cfdid +" will not load");
+                                                                    }else{
+                                                                        System.out.println("[ENGINE][CFD][LHS] # of LHS attributes for CFD ID" + cfdid +" is"+cfdlattr.size());
+                                                                    }                                                       
+                                                                    
+                                                                    
+                                                                    if(cfdrattr.size() != cfdrvalue.size()){
+                                                                        System.out.println("[ENGINE][CFD][RHS] Error - # of RHS attributes and values don't mathch, CFD" + cfdid +" will not load");
+                                                                    }else{ //generate LHS and RHS for CFD class
+                                                                        System.out.println("[ENGINE][CFD] - Begin to build CFD object with id:" + cfdid);
+                                                                        
+                                                                        for (int t = 0; t < cfdlattr.size(); t++){
+                                                                            String[] lunit = new String[2];
+                                                                            lunit[0] = cfdlattr.get(t);
+                                                                            lunit[1] = cfdlvalue.get(t);
+                                                                            LHS.add(lunit);
+                                                                        }
+                                                                        
+                                                                        
+                                                                        for (int t = 0; t < cfdrattr.size(); t++){
+                                                                            String[] runit = new String[2];
+                                                                            runit[0] = cfdrattr.get(t);
+                                                                            runit[1] = cfdrvalue.get(t);
+                                                                            RHS.add(runit);
+                                                                        }
+                                                                    cfd = new ConditionalFunctionalDependency(cfdid,LHS,RHS);
+                                                                    System.out.println("[Engine][CFD] Match a Conditional Functional Dependency -> ID:"+cfdid);
+                                                                    }
+                                                                
+                                                                }
+                                                               	
+                                                                
+                                                                
+                                                                int offset = Integer.parseInt(xmlReader.getFromConf("OFFSET",confFile));
 								CompareData cd;
 								cd = new CompareData(_logFileName,confFile);
 								String SCOLUMNS[] = new String[2];
@@ -181,8 +244,19 @@ public class Syncdb extends Thread{
 										log.saveLog(2,"[ENGINE] Starting "+(lt+1)+" of "+looptime+"\n");
 										
                                                                                 
-                                                                                ////
-                                                                                cd.setFd(fd);
+                                                                                //// load FD or CFD if they are not null
+                                                                                
+                                                                                if( fd != null){
+                                                                                    cd.setFd(fd);
+                                                                                    System.out.println("[ENGINE][FD] Loading FD to memory, id = "+fd.getId());
+                                                                                }
+                                                                                
+                                                                                if(cfd != null){
+                                                                                    cd.setCFd(cfd);
+                                                                                    System.out.println("[ENGINE][CFD] Loading CFD to memory, id = "+cfd.getCfdsn());
+                                                                                }
+                                                                                
+                                                                               
                                                                                 cd.setScolumnnames(scolumnnames);
                                                                                 cd.compareDataVectorList(sdvl,ddvl); //Every foe start here orz
                                                                                 
@@ -190,7 +264,7 @@ public class Syncdb extends Thread{
                                                                                 ////
                                                                                 
                                                                                 System.out.println("[Engine] End of "+(lt+1)+" of "+looptime);
-										System.out.println("[Summary] Matched :"+cd.matchTime+" | Insert :"+cd.insertTime+" | Delete:"+cd.deleteTime+" | Update:"+cd.updateTime+" |SQL Produce/Execute/Logged:"+cd.savedSql+"/"+cd.executedSql+"/"+cd.loggedSql+"\n");
+										System.out.println("[Summary] Matched :"+cd.matchTime+" | Insert :"+cd.insertTime+" | Delete:"+cd.deleteTime+" | Update:"+cd.updateTime+" | CFD M/V:"+cd.CFDmatch+"/"+cd.CFDviolate+" |SQL Produce/Execute/Logged:"+cd.savedSql+"/"+cd.executedSql+"/"+cd.loggedSql+"\n");
 										log.saveLog(2,"[Engine] End of "+(lt+1)+"/"+looptime+".\n");
 										log.saveLog(2,"[Summary] Matched :"+cd.matchTime+" | Insert :"+cd.insertTime+" | Delete:"+cd.deleteTime+" | Update:"+cd.updateTime+" |SQL Produce/Execute/Logged:"+cd.savedSql+"/"+cd.executedSql+"/"+cd.loggedSql+"\n");
 								}
@@ -207,6 +281,8 @@ public class Syncdb extends Thread{
 								System.out.println("[Sum] Number of producted sql command:"+tsaved);
 								System.out.println("[Sum] Number of executed sql command:"+cd.executedSql);
 								System.out.println("[Sum] Number of logged sql command:"+cd.loggedSql);
+                                                                System.out.println("[Sum] Number of CFD match:"+cd.CFDmatch);
+                                                                System.out.println("[Sum] Number of CFD violate:"+cd.CFDviolate);
 								System.out.println("[Engine]__________________ End of Phase 5 __________________");
 								
 								log.saveLog(2,"[Summary] Matched :"+cd.matchTime+" | Insert :"+cd.insertTime+" | Delete:"+cd.deleteTime+" | Update:"+cd.updateTime+" |SQL Produce/Execute/Logged:"+cd.savedSql+"/"+cd.executedSql+"/"+cd.loggedSql+"\n");

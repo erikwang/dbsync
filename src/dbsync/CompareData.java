@@ -17,19 +17,93 @@ public class CompareData{
 				int savedSql = 0;
 				int executedSql = 0;
 				int loggedSql = 0;
+                                int CFDmatch = 0;
+                                int CFDviolate = 0;
 				boolean tbCreateFlag = false;
 				LogMod log;
 				String _emptyChar; //���dvl or StrArr��Ϊ�յ�λ�ã���ʲô�ַ�����
                                 FunctionalDependency fd;
+                                ConditionalFunctionalDependency cfd;
                                 Vector<String> scolumnnames;
 
-    public void setScolumnnames(Vector<String> scolumnnames) {
-        this.scolumnnames = scolumnnames;
-    }
+public void setScolumnnames(Vector<String> scolumnnames) {
+    this.scolumnnames = scolumnnames;
+}
                                 
 public void setFd(FunctionalDependency _fd){
     this.fd = _fd;
 }
+
+public void setCFd(ConditionalFunctionalDependency _cfd){
+    this.cfd = _cfd;
+}
+
+
+public int checkCFD(Data _data, ConditionalFunctionalDependency cfd){ // 0 = nothing, 1 = matching , 2 = violate
+  try{
+    //since there could be more than one attribute either on LHS or RHS, so I need a list to storge each attribute
+    Vector<String[]> Lpivot = new Vector<String[]>();
+    Lpivot = cfd.getLHS();
+    Vector<String[]> Rpivot = new Vector<String[]>();
+    Rpivot = cfd.getRHS();
+    
+    String pivot; //single attribute name in LHS or RHS
+    String pvalue;
+    int pindex;
+    
+    //interation on LHS
+    //System.out.println("[Eng][LHS][Lpivot]"+Lpivot.size());
+    for(int t=0;t<Lpivot.size();t++){
+        pivot = Lpivot.get(t)[0];
+        pvalue = Lpivot.get(t)[1];
+        
+        pindex = getIndexOfColumn(pivot,scolumnnames);
+        pindex++;
+         //System.out.println("[Eng][LHS][PINDEX++]"+pindex);
+         //System.out.println("[Eng][LHS][PIVOT]"+pivot);
+        //System.out.println("[Eng][CFD][LHS] Find a attribute, index = "+pindex+", attribute = "+pivot+",value = "+pvalue);
+        //System.out.println("[Eng][CFD][LHS] Related values in data vector is: "+_data.getDataInfo(pindex));
+        if(! _data.getDataInfo(pindex).equals(pvalue)){
+            //System.out.println("[ENG][CFD]"+_data.getDataInfo(pindex)+" "+pvalue);
+            return 0;  // if LHS is not match to CFD, there is no need to continue to check RHS
+        }
+    }
+    
+    //interation on RHS
+     //System.out.println("[Eng][RHS][Rpivot]"+Rpivot.size());
+    for(int t=0;t<Rpivot.size();t++){
+        pivot = Rpivot.get(t)[0];
+        pvalue = Rpivot.get(t)[1];
+        
+        pindex = getIndexOfColumn(pivot,scolumnnames);
+        pindex++;
+        //System.out.println("[Eng][RHS][PINDEX++]"+pindex);
+        //System.out.println("[Eng][RHS][PIVOT]"+pivot);
+        //System.out.println("[Eng][CFD][RHS] Find a attribute, index = "+pindex+", attribute = "+pivot+",value = "+pvalue);
+        //System.out.println("[Eng][CFD][RHS] Related values in data vector is: "+_data.getDataInfo(pindex));    
+    
+        if(! _data.getDataInfo(pindex).equals(pvalue)){
+            System.out.println("[ENG][CFD]"+_data.getDataInfo(pindex)+" "+pvalue);
+            return 2;
+        }
+    }
+    
+    return 1;
+         
+    /*
+    System.out.println("[ENG][CFD DEBUG] size:"+_data.getSize());
+    for(int t = 0 ;t < _data.getSize(); t++){
+        System.out.println("[ENG][CFD DEBUG]"+_data.getDataInfo(t));
+    }
+    */
+  }catch (Exception e){
+      System.out.println("[CFD CHECKING]");
+      e.printStackTrace();
+  }finally{ return -1;}
+}
+
+
+
 
 
 //------------------------------------------------------------------------------------
@@ -40,20 +114,35 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
     pindex++;
     String operator = fd.getOperator();
     
-    System.out.println("[ENG][DEBUG] size:"+_data.getSize());
+    /*
+    System.out.println("\n[ENG][DEBUG] size:"+_data.getSize());
     for(int t = 0 ;t < _data.getSize(); t++){
         System.out.println("[ENG][DEBUG]"+_data.getDataInfo(t));
     }
+    */
+    ////////////NOV 25 - operator recognizing...
     
     if (operator.equals("great")){
-        System.out.print("[Eng][FD] Catch a >= ");
-        System.out.println("[Eng][Debug]"+new Float(_data.getDataInfo(pindex)).floatValue()+"  "+fd.getValue());
         if(new Float(_data.getDataInfo(pindex)).floatValue() >= fd.getValue()){
-            return true;
+             System.out.println("[Eng][FD] Catch a >= ");
+             System.out.println("[Eng][Debug]"+new Float(_data.getDataInfo(pindex)).floatValue()+"  "+fd.getValue());
+            log.saveLog(2,"[ENG][FD] Found a violate FD constraint check with FD ID:"+fd.id+"\n");
+            return false; //false means violated
         }
     }
-    System.out.print("[Eng][FD] Noting...");
-    return false;
+    
+    if (operator.equals("less")){
+        
+        if(new Float(_data.getDataInfo(pindex)).floatValue() <= fd.getValue()){
+            System.out.println("[Eng][FD] Catch a <= ");
+            System.out.println("[Eng][Debug]"+new Float(_data.getDataInfo(pindex)).floatValue()+"  "+fd.getValue());
+            log.saveLog(2,"[ENG][FD] Found a violate FD constraint check with FD ID:"+fd.id+"\n");
+            return false;
+        }
+    }
+        
+    //System.out.println("[Eng][FD] Noting...");
+    return true; //true means not violated
 }
 
 			
@@ -493,7 +582,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 			//sql2 ִ��sql��������
 				
 					String sql1,sql0,sql3;
-					// whether there is a excuteflag
+					// whether there is a excuteflag, to execute while executeflag = 0
                                         sql1 = "SELECT sqltext,sourcename FROM sqlcommand where executeflag = 0 order by sqlsn desc";
 					String sql2="";
 					String source ="";
@@ -622,6 +711,34 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 				boolean lastDel;
 				lastDel = false;
 				for(int t = 0 ;t<(sstrarr.length);t++){		//ƽ�бȽϴ���
+                                        try{
+                                            tData = sdv.getFromDataVectorBySn(sstrarr[t][0]);
+                                        }catch (Exception e){
+                                            //System.out.println("\n[~~!!EXCEPTION!!~~][CFD]");
+                                            //e.printStackTrace();
+                                        }
+                                        
+                                        
+                                        ////Apply to constraints
+                                        
+                                        if(checkCFD(tData,cfd) == 1){
+                                            CFDmatch++;
+                                            System.out.println("\n[Eng][CFD] Found a matching.");
+                                        }else if(checkCFD(tData,cfd) == 2){
+                                            //System.out.println("[Eng][CFD] Found a violated.");
+                                            System.out.println("\n[Eng][CFD][Violate]"+cfd.getCfdsn()+" "+tData.getDataInfo(0));
+                                            CFDviolate++;
+                                        } 
+                                                                                                               
+                                        
+                                        if(! checkFD(tData,fd)){ //while violate
+                                            executeflag = 1; //don't execute the sql, just log
+                                            System.out.println("[Eng][FD] Found a violated~~~~~~~~~~~~~");
+                                        }else{
+                                            executeflag = 0;
+                                        }
+                                        
+                                        
 					if(!(sstrarr[t][1].equals(dstrarr[t][1]))){	//���������������ֵ��ͬ�����
 							//System.out.println(sstrarr[t][1]+" |||| "+dstrarr[t][1]);
 							sqlflag = false;
@@ -659,19 +776,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 							if(! (sstrarr[t][0].equals(_emptyChar)) && ( !(dstrarr[t][0].equals(_emptyChar)))){ //ԴĿ�����ڼ�¼����Ϊ������Դ��ݱ��
 									//if (lastDel == true){i++;lastDel = false;}
 									//System.out.println(sdv.getDataVectorSize()+" "+i);
-									
-                                                            
-                                                        
                                                                         tData = sdv.getFromDataVectorBySn(sstrarr[t][0]);
-                                                                        
-                                                                   
-                                                                        if(checkFD(tData,fd)){
-                                                                            executeflag = 1;
-                                                                            System.out.println("[Eng][FD] Found a violated~~~~~~~~~~~~~");
-                                                                        }else{
-                                                                            executeflag = 0;
-                                                                        }
-                                                                        
                                                                         
 									Vector<String> vColumnName;
 									vColumnName = new Vector<String>();			
@@ -707,7 +812,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 					}
 				}
 				return sqlflag;
-			}catch(Exception e){System.out.println("!!!!"+e);}
+			}catch(Exception e){System.out.println("[compare]!!!!"+e);}
 				return true;
 		}
 	
@@ -821,8 +926,11 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 
         //------------------------------------------------------------------------------------
 	public int getIndexOfColumn(String columnname,Vector<String>columnlist){ // if I have a column name, it returns the column sequence id of the name
+            //System.out.println("!!@@@@@@@@@@@@@@@@"+columnname+"!");
             for(int t = 0 ; t < columnlist.size();t++){
-                if(columnname.equals(columnlist.get(t))){
+                //System.out.println("!!!!!!!!!!!!!!!"+columnname+"!"+columnlist.get(t)+"!"+t);
+                if(columnname.equals(columnlist.get(t).toString())){
+                    
                     return t;
                 }
             }

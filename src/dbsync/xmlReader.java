@@ -47,6 +47,8 @@ public class xmlReader{
 														paras = pElement.getFirstChild().getNodeValue();
 														returnList.add(paras);
 												}
+                                                                                                System.out.println("[DEBUG][XMLREADER] Parameter is "+para);
+                                                                                                showList(returnList);
 												
 								}catch(Exception e){
 										System.out.println(e);
@@ -54,5 +56,16 @@ public class xmlReader{
 			return returnList;
 		
 		}
+                
+                public void showList(Vector<String> _in){
+                    if(_in != null){
+                        for(int t=0; t<_in.size();t++){
+                            System.out.println("[DEBUG][XMLREADER] "+_in.get(t));
+                        }
+                    }else{
+                            System.out.println("[DEBUG][XMLREADER] empty xml list");
+                    }
+                
+                }
 	
 }
