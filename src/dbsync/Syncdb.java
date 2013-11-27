@@ -20,13 +20,14 @@ public class Syncdb extends Thread{
 		log = new LogMod();
 		String _logFileName = log.logFileName;
 		System.out.println("LOGFILENAME:"+_logFileName);
-		//String _confFile = "./dbsync/conf/config.xml";
+		////////////String _confFile = "./dbsync/conf/config.xml";
                 String _confFile = "conf/config.xml";
+                //String _confFile = "conf/config.xml";
 		Vector<String> syncList;
 		syncList = new Vector<String>();
 		syncList = xmlReader.getListFromConf("DBSYNC",_confFile);
 		int synctime  = Integer.parseInt(xmlReader.getFromConf("SYNCTIME",_confFile)); 
-		
+                
                 
                 //for support FD and CFD
                 FunctionalDependency fd = null;
@@ -66,7 +67,11 @@ public class Syncdb extends Thread{
 				for(int r=0;r<syncList.size();r++){
 								String starttime = new java.util.Date().toString();
 								String confFile = syncList.get(r);
-								System.out.println(confFile);
+								System.out.println("[ENG][CFG] Loading config file: "+confFile);
+                                                                
+                                                                String CFDAUTOCLEAN = xmlReader.getFromConf("CFDAUTOCLEAN",confFile);
+                                                                String CFDSUGGESTSQL = xmlReader.getFromConf("CFDSUGGESTSQL",confFile);
+		
 								String ROWIDNAME = xmlReader.getFromConf("ROWID",confFile);
 								String STABLE = xmlReader.getFromConf("STABLE",confFile);
 								String DTABLE = xmlReader.getFromConf("DTABLE",confFile);

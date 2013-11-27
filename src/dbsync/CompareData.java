@@ -21,7 +21,7 @@ public class CompareData{
                                 int CFDviolate = 0;
 				boolean tbCreateFlag = false;
 				LogMod log;
-				String _emptyChar; //���dvl or StrArr��Ϊ�յ�λ�ã���ʲô�ַ�����
+				String _emptyChar; //If DVL or StrArr have an empty value, use this char to instead
                                 FunctionalDependency fd;
                                 ConditionalFunctionalDependency cfd;
                                 Vector<String> scolumnnames;
@@ -83,8 +83,8 @@ public int checkCFD(Data _data, ConditionalFunctionalDependency cfd){ // 0 = not
         //System.out.println("[Eng][CFD][RHS] Related values in data vector is: "+_data.getDataInfo(pindex));    
     
         if(! _data.getDataInfo(pindex).equals(pvalue)){
-            System.out.println("[ENG][CFD]"+_data.getDataInfo(pindex)+" "+pvalue);
-            return 2;
+            //System.out.println("[ENG][CFD]"+_data.getDataInfo(pindex)+" "+pvalue);
+            return 2; // violated to CFD RHS
         }
     }
     
@@ -99,7 +99,8 @@ public int checkCFD(Data _data, ConditionalFunctionalDependency cfd){ // 0 = not
   }catch (Exception e){
       System.out.println("[CFD CHECKING]");
       e.printStackTrace();
-  }finally{ return -1;}
+      return -1;
+  }
 }
 
 
@@ -217,7 +218,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 				log.saveLog(3,"[CD] DataVector Size | [Sou DVL Size]:"+sdvlLength+" [Des DVL Size]:"+ddvlLength+"\n");
 				//System.out.println(sdvlLength+"!!"+ddvlLength);
 				
-				System.out.println("[CD S to D] >Begin a Source to Destination compare"); //Դ��Ŀ��ıȽϣ����ж����׷�ӵ������ͬʱƽ�бȽ��ɴ˷���
+				System.out.println("[CD S to D] >Begin a Source to Destination compare"); //Do source to dest comparision, to decide whether need a block add, meanwhile para compare will start after here
 				log.saveLog(2,"[CD S to D]>Begin a Source to Destination compare"+"\n");
 				for(int i=0;i<sdvlLength;i++){
 						for(int j=0;j<ddvlLength;j++){
@@ -246,7 +247,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 				System.out.println("\n");
 				System.out.println("[CD S to D] >Finished a Source to Destination compare");
 				log.saveLog(2,"[CD S to D]>A Source to Destination compare finished."+"\n");
-				System.out.println("[CD D to S] >Begin a Destination to Source compare");	//Ŀ�굽Դ�ıȽϣ��ж����ɾ������
+				System.out.println("[CD D to S] >Begin a Destination to Source compare");	//Dest to Source comparing, to decide whether need block delete
 				log.saveLog(2,"[CD D to S]>Begin a Destination to Source compare"+"\n");
 				for(int i=0;i<ddvlLength;i++){
 						for(int j=0;j<sdvlLength;j++){
@@ -313,7 +314,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 				String dtcolumnname,dtcolumntype;
 				int dtcolumnleng;
 				
-				//׷��sis_ori_rowid,opdate�����±�
+				//add sis_ori_rowid, opdate to dest new table
 				sql2 = "CREATE TABLE "+dtablename+" (sis_ori_rowid varchar2(32) primary key";
 				//sql2 = "CREATE TABLE "+dtablename+" (sis_ori_rowid rowid primary key";
 				sql2 = sql2 + " , sis_des_optime Date default SYSDATE , sis_des_rowidsn number(32)";
@@ -576,10 +577,10 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 	
 	
 //------------------------------------------------------------------------------------			
-		public void executeSqlCommand(){ // ִ��sis.sqlcommand�������е�sql���
-			//sql0 ������sqlִ����ɺ��״̬
-			//sql1 ѡȡsqlcommand����������δִ�е�sql���
-			//sql2 ִ��sql��������
+		public void executeSqlCommand(){ //execute the sql commands in sis.sqlcommand
+			//sql0 use to set the states after execute a sql̬
+			//sql1 select those sqlcommand which not execute yet in sis.sqlcommand
+			//sql2 host of executing sql
 				
 					String sql1,sql0,sql3;
 					// whether there is a excuteflag, to execute while executeflag = 0
@@ -619,7 +620,8 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 										//sql0 = "INSERT INTO sqlcommandbak values(seq_sis_sqlcommand.nextval,'"+sql2+"',sysdate,'"+source+"')";
 										psmt.setString(1,sql2);
 										psmt.setString(2,source);
-										psmt.execute();
+					///////////////////////for not log sql when dump new table	
+                                                                                psmt.execute();
 										loggedSql ++;
 										log.saveLog(2,"[SQL EXECUTE] Last SQL command logged"+"\n");
 										//stmt0.executeQuery(sql0);
@@ -720,38 +722,49 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
                                         
                                         
                                         ////Apply to constraints
-                                        
+                                        /*
                                         if(checkCFD(tData,cfd) == 1){
                                             CFDmatch++;
-                                            System.out.println("\n[Eng][CFD] Found a matching.");
+                                            //System.out.println("\n[Eng][CFD][Matching] Found a matching.");
+                                            System.out.print("[CM]");
                                         }else if(checkCFD(tData,cfd) == 2){
-                                            //System.out.println("[Eng][CFD] Found a violated.");
-                                            System.out.println("\n[Eng][CFD][Violate]"+cfd.getCfdsn()+" "+tData.getDataInfo(0));
+                                            System.out.print("[CV]");
+                                            //System.out.println("\n[Eng][CFD][Violate]"+cfd.getCfdsn()+" "+tData.getDataInfo(0));
                                             CFDviolate++;
+                                            
+                                            //Generate a suggest fix SQL to destination side
+                                            //Actually I think it is not necessary to do so because if you wish to clean, try to run updates to whole dataset.
+                                            
+                                            String sqlcfdDest = "UPDATE "+dTable+" SET SIS_DES_OPTIME = SYSDATE";
+                                            sqlcfdDest = sqlcfdDest + cfd.getRHSUpdateString();
+                                            sqlcfdDest = sqlcfdDest + " WHERE SIS_ORI_ROWID = '"+sstrarr[t][0]+"'";
+                                            //sqlflag = true;
+                                            System.out.println("\n[Eng][CFD][Violate] Suggest clean SQL: "+sqlcfdDest);
+                                            //log.saveLog(2,"[CFD cleaning] "+sqlcfd+"\n");
+                                            
                                         } 
                                                                                                                
                                         
                                         if(! checkFD(tData,fd)){ //while violate
                                             executeflag = 1; //don't execute the sql, just log
-                                            System.out.println("[Eng][FD] Found a violated~~~~~~~~~~~~~");
+                                            System.out.println("[Eng][FD] Found a violated!");
                                         }else{
                                             executeflag = 0;
                                         }
+                                        */
                                         
-                                        
-					if(!(sstrarr[t][1].equals(dstrarr[t][1]))){	//���������������ֵ��ͬ�����
+					if(!(sstrarr[t][1].equals(dstrarr[t][1]))){	//if the value in String Arrays are not equal
 							//System.out.println(sstrarr[t][1]+" |||| "+dstrarr[t][1]);
 							sqlflag = false;
-							//if((sstrarr[t][0].equals("*")) && ( ! dstrarr[t][0].equals("*"))){ //Դ�����ڼ�¼��Ŀ����ڣ���ΪԴ���������ɾ��
-							if((sstrarr[t][0].equals(_emptyChar)) && ( ! dstrarr[t][0].equals(_emptyChar))){ //Դ�����ڼ�¼��Ŀ����ڣ���ΪԴ���������ɾ��
-									sql1 = "DELETE FROM "+dTable+" WHERE sis_ori_rowid = '"+dstrarr[t][0]+"'";
+							//if((sstrarr[t][0].equals("*")) && ( ! dstrarr[t][0].equals("*"))){ 
+							if((sstrarr[t][0].equals(_emptyChar)) && ( ! dstrarr[t][0].equals(_emptyChar))){ //if the value in source is not existed, but exists in dest, then decide a delete was occurred in source									sql1 = "DELETE FROM "+dTable+" WHERE sis_ori_rowid = '"+dstrarr[t][0]+"'";
 									sqlflag = true;
 									//lastDel = true;
 									log.saveLog(2,"[ParaCompare delete] "+sql1+"\n"); 
 									deleteTime ++;
 							}
 							
-							if(! (sstrarr[t][0].equals(_emptyChar)) && ( (dstrarr[t][0].equals(_emptyChar)))){ //Դ���ڼ�¼��Ŀ�겻���ڣ���ΪԴ�������������
+							if(! (sstrarr[t][0].equals(_emptyChar)) && ( (dstrarr[t][0].equals(_emptyChar)))){ //if source has the value but dest doesn't, then decide need insert actions
 									//if (lastDel == true){i++;lastDel = false;}
 									//System.out.println("current i is "+i+" sdv.lenth=" + sdv.getDataVectorSize());
 									//tData = sdv.getFromDataVector(i);
@@ -773,7 +786,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 									insertTime ++;
 							}
 							
-							if(! (sstrarr[t][0].equals(_emptyChar)) && ( !(dstrarr[t][0].equals(_emptyChar)))){ //ԴĿ�����ڼ�¼����Ϊ������Դ��ݱ��
+							if(! (sstrarr[t][0].equals(_emptyChar)) && ( !(dstrarr[t][0].equals(_emptyChar)))){ //if both source and dest have the value, then decide to do update actions
 									//if (lastDel == true){i++;lastDel = false;}
 									//System.out.println(sdv.getDataVectorSize()+" "+i);
                                                                         tData = sdv.getFromDataVectorBySn(sstrarr[t][0]);
@@ -909,7 +922,7 @@ public boolean checkFD(Data _data, FunctionalDependency fd){
 						String sql2;
 						String dtcolumnname,dtcolumntype;
 						int dtcolumnleng;
-						//׷��sis_ori_rowid,opdate�����±�
+						//add sis_ori_rowid, opdate to new dest table
 						for (;rst1.next();){
 							for(;iter < (numberOfColumns+1);iter++){
 								dtcolumnname = rsmd.getColumnName(iter);

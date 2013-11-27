@@ -6,7 +6,7 @@ public class Data{
 		Vector<String> data;
 		
 		public Data(){
-			data = new Vector<String>(); //ππ‘Ï
+			data = new Vector<String>(); //
 			rowId = null;
 		}
 		

@@ -11,15 +11,24 @@ import java.util.*;
  * @author Erik
  */
 public class ConditionalFunctionalDependency {
-    int cfdsn;
-    String[] units;
-    Vector<String[]> LHS;
-    Vector<String[]> RHS;
+    private int cfdsn;
+    private String[] units;
+    private String CFDAUTOCLEAN;
+    private String CFDSUGGESTSQL;
+    private Vector<String[]> LHS;
+    private Vector<String[]> RHS;
 
     public int getCfdsn() {
         return cfdsn;
     }
 
+    public String getCFDAUTOCLEAN(){
+        return CFDAUTOCLEAN;
+    }
+    
+    public String getCFDSUGGESTSQL(){
+        return CFDSUGGESTSQL;
+    }
     
     
     public Vector<String[]> getLHS() {
@@ -36,5 +45,13 @@ public class ConditionalFunctionalDependency {
         this.RHS = RHS;
     }
     
+    public String getRHSUpdateString(){
+        String update = "";
+        for (int t=0;t< RHS.size();t++){
+            update = update + " ," +RHS.get(t)[0]+"= '"+RHS.get(t)[1]+"'";
+        }
+        return update;
+        
+    }
     
  }
